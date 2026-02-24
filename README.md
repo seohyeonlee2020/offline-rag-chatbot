@@ -1,8 +1,4 @@
-# AgriAdvice: Offline chatbot to address the digital divide
-
-Sure, here's a toned-down version of the GitHub README. It sticks to digital access gaps in low-resource areas and the offline tech decisions, written straightforwardly.
-
-# Offline RAG Farming Advisor
+# AgriAdvice: Offline RAG chatbot to address the digital divide
 
 App for smallholder farmers needing climate-adapted advice without internet. Uses RAG with TinyLlama to pull answers from a document base, keeping outputs grounded.
 
