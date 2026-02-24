@@ -15,7 +15,7 @@ from langchain_chroma import Chroma
 def load_text_data():
     """Load text data from JSON file or extract from directory"""
     if not os.path.exists("./text_data.json"):
-        directory = "./farmai_training_data"
+        directory = "./farming_training_data"
         text_data = extract_text(directory)
         with open('text_data.json', 'w') as fp:
             json.dump(text_data, fp)
@@ -115,7 +115,7 @@ def call_ollama(prompt, model):
         return f"Chatbot Error: {str(e)}"
 
 # Streamlit App
-st.title("FarmAI: Climate-Smart Farming Assistant")
+st.title("AgriAdvice: Offline Farming Assistant")
 
 # Check Ollama status
 if not check_ollama_status():
