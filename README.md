@@ -1,5 +1,6 @@
-# 🌾 FarmAI: Climate-Sensitive Agricultural Advisor
-### Empowering women smallholder farmers with AI-powered agricultural knowledge
+# AdviceAI: Chatbot built to deliver advice offline
 
-### 🎯 Overview
-FarmAI is an offline-capable agricultural chatbot designed specifically for women smallholder farmers. It provides 24/7 access to farming knowledge through mobile phones and basic computers, combining agricultural research with AI to deliver practical, climate-sensitive advice in plain language.
+<img width="760" height="921" alt="offline_rag_architecture" src="https://github.com/user-attachments/assets/6f8e5f77-9ec3-4f94-a35a-105b1f436af3" />
+
+
+
