@@ -2,10 +2,10 @@
 
 App for smallholder farmers needing climate-adapted advice without internet. Uses RAG with TinyLlama to pull answers from a document base, keeping outputs grounded.
 
-Built through UN Women AI School, focusing on gaps like limited device access (e.g., shared computers in villages) and spotty connectivity.
+Built through , focusing on gaps like limited device access (e.g., shared computers in villages) and spotty connectivity.
 
 ## Background
-Inspired by a classmate who suggested an offline AI that can run on flip phones. Scaled this idea to a technologically viable architecture. 
+Scaled ambitious idea from a classmate ("AI on flip phone offline") to a technologically viable architecture. 
 <img width="760" height="921" alt="offline_rag_architecture" src="https://github.com/user-attachments/assets/6f8e5f77-9ec3-4f94-a35a-105b1f436af3" />
 
 ## How It Works
