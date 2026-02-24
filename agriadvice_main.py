@@ -15,7 +15,7 @@ from langchain_chroma import Chroma
 def load_text_data():
     """Load text data from JSON file or extract from directory"""
     if not os.path.exists("./text_data.json"):
-        directory = "./farming_training_data"
+        directory = "./rag_training_data"
         text_data = extract_text(directory)
         with open('text_data.json', 'w') as fp:
             json.dump(text_data, fp)
@@ -24,6 +24,8 @@ def load_text_data():
         with open('text_data.json') as f:
             text_data = json.load(f)
             return text_data
+
+#Initial version focused on farming advice for low-resource communities, especially women farmers with limited land rights
 
 def dict_to_documents(file_dict):
     """
