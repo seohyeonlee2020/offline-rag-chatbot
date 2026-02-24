@@ -18,7 +18,7 @@ Designed in two phases for low-connectivity areas.
 - All open-source, no vendor costs.
 
 ## Tech Choices for Offline Architecture
-- **TinyLlama**: Small enough for CPU on older laptops. 
+- **Small Language Model**: Lightwaight enough for CPU on most laptops. 
 - **RAG only**: Sticks to input data to prevent hallucinations.
 - **Open source components only**: Removes financial barriers and prevents vendor lock-in. 
 - English for MVP; will scale to multiple languages.
