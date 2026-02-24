@@ -39,7 +39,7 @@ streamlit run agriadvice_main.py
 
 ## Next Steps
 - Usage documentation
-- Multilingual Quantize TinyLlama (4-bit via llama.cpp) to cut size/speed up inference.
+- Multilingual support
 - Group easily serchable information into a mass SMS service to reach users who do not have access to computers.
 
 
