@@ -21,9 +21,7 @@ Designed in two phases for low-connectivity areas.
 - RAG setup: Model only uses retrieved docs to avoid hallucinations and false advice. 
 - All open-source, no vendor costs.
 
-Fallback idea: SMS for easily searchable information like weather/
-
-## Tech Choices for Offline
+## Tech Choices for Offline Architecture
 - **TinyLlama**: Small enough for CPU on older laptops. 
 - **RAG only**: Sticks to input data to prevent hallucinations.
 - **Open source components only**: Removes financial barriers and prevents vendor lock-in. 
