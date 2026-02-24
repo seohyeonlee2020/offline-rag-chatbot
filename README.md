@@ -1,12 +1,8 @@
 # AgriAdvice: Offline RAG chatbot to address the digital divide
 
-App for smallholder farmers needing climate-adapted advice without internet. Uses RAG with TinyLlama to pull answers from a document base, keeping outputs grounded.
+App for smallholder farmers needing climate-adapted advice without internet. Scaled ambitious idea from a classmate ("AI on flip phone offline") to a technologically viable architecture. Uses RAG with TinyLlama to pull answers from a document base, keeping outputs grounded. Focused on optimizing architecture for extremely low-resource contexts. Focused on gaps like limited device access (e.g., shared computers in villages) and spotty connectivity.
 
-Built through , focusing on gaps like limited device access (e.g., shared computers in villages) and spotty connectivity.
-
-## Background
-Scaled ambitious idea from a classmate ("AI on flip phone offline") to a technologically viable architecture. 
-<img width="760" height="921" alt="offline_rag_architecture" src="https://github.com/user-attachments/assets/6f8e5f77-9ec3-4f94-a35a-105b1f436af3" />
+<img width="400" height="auto" alt="offline_rag_architecture" src="https://github.com/user-attachments/assets/6f8e5f77-9ec3-4f94-a35a-105b1f436af3" />
 
 ## How It Works
 Designed in two phases for low-connectivity areas.
