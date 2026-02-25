@@ -3,7 +3,6 @@ import os
 import json
 import time
 import requests
-from utils.text_data_preprocessing import *
 import logging
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -13,17 +12,10 @@ from langchain_chroma import Chroma
 
 @st.cache_data
 def load_text_data():
-    """Load text data from JSON file or extract from directory"""
-    if not os.path.exists("./text_data.json"):
-        directory = "./rag_training_data"
-        text_data = extract_text(directory)
-        with open('text_data.json', 'w') as fp:
-            json.dump(text_data, fp)
-        return text_data
-    else:
-        with open('text_data.json') as f:
-            text_data = json.load(f)
-            return text_data
+    with open('text_data.json', 'r') as f:
+        print("opening JSON file")
+        json_data = json.load(f)
+        return json_data
 
 #Initial version focused on farming advice for low-resource communities, especially women farmers with limited land rights
 
@@ -57,8 +49,9 @@ def dict_to_documents(file_dict):
 @st.cache_data
 def prepare_documents():
     """Convert text data to chunked documents"""
-    text_data = load_text_data()
-    data = dict_to_documents(text_data)
+    print("chunking text data")
+    training_data = load_text_data()
+    data = dict_to_documents(training_data)
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=250,
         chunk_overlap=20,
@@ -73,7 +66,7 @@ def create_vectorstore():
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     vectorstore = Chroma.from_documents(
         documents=prepare_documents(),
-        collection_name="farmai-embeddings",
+        collection_name="agriadvice-embeddings",
         embedding=embeddings,
         persist_directory="./embeddings"
     )
@@ -124,63 +117,78 @@ if not check_ollama_status():
     st.error("⚠️ Ollama is not running. Start it with 'ollama serve'")
     st.stop()
 
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# User input
-user_question = st.text_input("Ask a farming question:")
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-if user_question:
-    try:
-        load_vectorstore()
-        logging.info(f"Processing user question: {user_question}")
-        # Retrieve relevant documents
-        logging.info("Searching for relevant documents...")
+if user_question := st.chat_input("Ask a farming question:"):
+    st.session_state.messages.append({"role": "user", "content": user_question})
+    # Display user message in chat message container
+    with st.chat_message("user"):
+        st.markdown(user_question)
 
-        retrieved_docs = st.session_state.vectorstore.similarity_search(
-            user_question, k=2
-            )
-        logging.info(f"Retrieved {len(retrieved_docs)} documents")
+    with st.chat_message("assistant"):
+        try:
+            st.info("Loading...")
+            load_vectorstore()
+            logging.info(f"Processing user question: {user_question}")
+            # Retrieve relevant documents
+            logging.info("Searching for relevant documents...")
 
-        # Show retrieval info
-        st.info(f"Found {len(retrieved_docs)} relevant documents")
+            retrieved_docs = st.session_state.vectorstore.similarity_search(
+                user_question, k=2
+                )
+            logging.info(f"Retrieved {len(retrieved_docs)} documents")
 
-        if not retrieved_docs:
-            st.warning("No relevant documents found. Try rephrasing your question.")
-            logging.warning("No documents retrieved for user question")
-        else:
-            # Create context from retrieved docs
-            logging.info("Creating context from retrieved documents...")
-            context_texts = "\n\n".join(doc.page_content for doc in retrieved_docs)
+            # Show retrieval info
+            st.info(f"Found {len(retrieved_docs)} relevant documents")
 
-            # Load and format prompt
-            logging.info("Loading and formatting prompt...")
-            prompt_template = load_prompt_template()
-            prompt = prompt_template.format(combined_context=context_texts, user_question=user_question)
+            if not retrieved_docs:
+                st.warning("No relevant documents found. Try rephrasing your question.")
+                logging.warning("No documents retrieved for user question")
+            else:
+                # Create context from retrieved docs
+                logging.info("Creating context from retrieved documents...")
+                context_texts = "\n\n".join(doc.page_content for doc in retrieved_docs)
 
-            # Generate response
-            model = 'qwen2:0.5b'
-            logging.info(f"Generating response with model: {model}")
+                # Load and format prompt
+                logging.info("Loading and formatting prompt...")
+                prompt_template = load_prompt_template()
+                prompt = prompt_template.format(combined_context=context_texts, user_question=user_question)
 
-            with st.spinner("Generating response..."):
-                start_time = time.process_time()
-                llm_response = call_ollama(prompt, model)
-                end_time = time.process_time()
+                # Generate response
+                model = 'qwen2:0.5b'
+                logging.info(f"Generating response with model: {model}")
 
-            # Display results
-            response_time = end_time - start_time
-            logging.info(f"Total response time: {response_time:.2f} seconds")
+                with st.spinner("Generating response..."):
+                    start_time = time.process_time()
+                    response = call_ollama(prompt, model)
+                    end_time = time.process_time()
+                    st.session_state.messages.append({"role": "assistant", "content": response})
 
-            st.write(f"**Response time:** {response_time:.2f} seconds")
-            st.write("**Answer:**")
-            st.write(llm_response)
+                # Display results
+                response_time = end_time - start_time
+                logging.info(f"Total response time: {response_time:.2f} seconds")
 
-            # Show debug info in expander
-            with st.expander("🔍 Debug Information"):
-                st.write(f"**Retrieved {len(retrieved_docs)} documents:**")
-                for i, doc in enumerate(retrieved_docs):
-                    st.write(f"**Document {i+1}:** {doc.metadata.get('filename', 'Unknown')}")
-                    st.write(f"*Content preview:* {doc.page_content[:200]}...")
+                st.write(f"**Response time:** {response_time:.2f} seconds")
+                st.write("**Answer:**")
+                st.write(response)
 
-    except Exception as e:
-        logging.error(f"Error processing user question: {str(e)}")
-        st.error(f"An error occurred while processing your question: {str(e)}")
-        st.info("Please check the logs for more details.")
+        except Exception as e:
+            logging.error(f"Error processing user question: {str(e)}")
+            st.error(f"An error occurred while processing your question: {str(e)}")
+            st.info("Please check the logs for more details.")
+
+        # Show debug info in expander
+        with st.expander("🔍 Debug Information"):
+            st.write(f"**Retrieved {len(retrieved_docs)} documents:**")
+            for i, doc in enumerate(retrieved_docs):
+                st.write(f"**Document {i+1}:** {doc.metadata.get('filename', 'Unknown')}")
+                st.write(f"*Content preview:* {doc.page_content[:200]}...")
+
+
+
+
