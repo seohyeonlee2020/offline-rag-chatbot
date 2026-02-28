@@ -10,7 +10,7 @@ Designed in two phases for low-connectivity areas.
 **Setup (online, one-time, maybe intermittent upgrades)**:
 - Extract text from 20-30 farming manuals using pypdf (text OCR) and pytesseract (image extraction). 
 - Embed 20-30 PDFs using Hugging Face models.
-- Store in ChromaDB vector DB.
+- Create vectorstore.
 
 **Offline use (laptops)**:
 - small language model runs queries on embedded data. No internet needed.
