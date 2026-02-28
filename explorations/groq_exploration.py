@@ -24,8 +24,8 @@ GROQ_API_KEY= os.getenv('GROQ_API_KEY')
 
 #dump text_data as json if not already done
 if not os.path.exists("./text_data.json"):
-	directory = "./farmai_training_data"
-	text_data =  extract_text(directory)
+	directory = "./agriadvice_training_data"
+	text_data = extract_text(directory)
 	with open('text_data.json', 'w') as fp:
 	    json.dump(text_data, fp)
 else:
