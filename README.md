@@ -18,7 +18,7 @@ Designed in two phases for low-connectivity areas.
 - All open-source, no vendor costs.
 
 ## Tech Choices for Offline Architecture
-- **Small Language Model**: Lightwaight enough for CPU on most laptops. 
+- **Small Language Model**: Lightweight enough for CPU on most laptops. 
 - **RAG only**: Sticks to input data to prevent hallucinations.
 - **Open source components only**: Removes financial barriers and prevents vendor lock-in. 
 - English for MVP; will scale to multiple languages.
@@ -30,11 +30,8 @@ Designed in two phases for low-connectivity areas.
 git clone seohyeonlee2020/offline-rag-chatbot.git
 pip install -r requirements.txt
 
-# Embed PDFs (online)
-python utils/text_data_preprocessing.py 
-
 # Run offline on localhost
-streamlit run agriadvice_main.py  
+streamlit run agriadvice_ver1.py  
 ```
 
 ## Next Steps
